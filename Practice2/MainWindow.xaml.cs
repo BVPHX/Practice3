@@ -43,13 +43,21 @@ namespace Practice2
 
         private void ResultOutputButtonClick(object sender, RoutedEventArgs e)
         {
+            
             res = new DataTable();
             resultGrid.ItemsSource = null;
             resultGrid.Items.Clear();
             resultGrid.Columns.Clear();
-            FillMass.Fill(Convert.ToInt32(inputBox.Text), out processedArray);
-
-
+            try
+            {
+                FillMass.Fill(Convert.ToInt32(inputBox.Text), out processedArray);
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show("Неверные данные");
+                inputBox.Focus();
+                return;
+            }
             for (int i = 0; i < processedArray.GetLength(0); i++)
             {
                 res.Columns.Add("column " + i.ToString(), typeof(string));
@@ -69,7 +77,6 @@ namespace Practice2
         }
         public void SaveButton_click(object sender, RoutedEventArgs e)
         {
-
             FillMass.SaveMatrix(path, processedArray);
         }
         public void OpenButton_click(object sender, RoutedEventArgs e)
@@ -79,8 +86,6 @@ namespace Practice2
             resultGrid.ItemsSource = null;
             resultGrid.Items.Clear();
             resultGrid.Columns.Clear();
-
-
             for (int i = 0; i < savedArray.GetLength(0); i++)
             {
                 res.Columns.Add("column " + i.ToString(), typeof(string));
